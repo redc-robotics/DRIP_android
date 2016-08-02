@@ -1,0 +1,1 @@
+include ':app', ':httpclient-4.2.1', ':httpcore-4.2.1'
