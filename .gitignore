@@ -1,8 +1,4 @@
 # External libs
-commons-cli-1.2/
-commons-codec-1.9/
-httpclient-4.2.1/
-httpcore-4.2.1/
 
 # Built application files
 *.apk
