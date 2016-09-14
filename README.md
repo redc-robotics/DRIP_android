@@ -1,2 +1,2 @@
-# RSRAndroidApp
-Android to control underwater ROV for RSR
+# DRIPdroid
+Android app to control redC robots
