@@ -9,16 +9,19 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 
@@ -27,6 +30,10 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.URI;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+
+import io.github.funkynoodles.testsensor.adapter.DrawerListAdapter;
+import io.github.funkynoodles.testsensor.model.DrawerItem;
 
 public class MainActivity extends Activity implements SensorEventListener {
 
@@ -73,6 +80,19 @@ public class MainActivity extends Activity implements SensorEventListener {
 
     private MjpegView mv;
 
+    // Drawer
+    private DrawerLayout drawerLayout;
+    private ListView drawerList;
+    private ActionBarDrawerToggle drawerToggle;
+
+    private CharSequence drawerTitle;
+    private CharSequence title;
+
+    private String[] menuTitles;
+
+    private ArrayList<DrawerItem> drawerItems;
+    private DrawerListAdapter drawerListAdapter;
+
     //Networking
 
     int serverPort = 8008;
@@ -86,16 +106,12 @@ public class MainActivity extends Activity implements SensorEventListener {
             try {
                 res = httpclient.execute(new HttpGet(URI.create(url[0])));
                 //Log.d(TAG, "2. Request finished, status = " + res.getStatusLine().getStatusCode());
-                if(res.getStatusLine().getStatusCode()==401){
+                if (res.getStatusLine().getStatusCode() == 401) {
                     //You must turn off camera User Access Control before this will work
                     return null;
                 }
                 return new MjpegInputStream(res.getEntity().getContent());
-            } catch (ClientProtocolException e) {
-                e.printStackTrace();
-                //Log.d(TAG, "Request failed-ClientProtocolException", e);
-                //Error connecting to camera
-            } catch (IOException e) {
+            }catch (IOException e) {
                 e.printStackTrace();
                 //Log.d(TAG, "Request failed-IOException", e);
                 //Error connecting to camera
@@ -202,7 +218,7 @@ public class MainActivity extends Activity implements SensorEventListener {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         setContentView(R.layout.activity_main);
 
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN, WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
 
         mv = (MjpegView)findViewById(R.id.mjpegView);
@@ -213,14 +229,14 @@ public class MainActivity extends Activity implements SensorEventListener {
         //This is the robot webcam:
         //videoURL = "http://192.168.0.2:8090/?action=stream";
         String robotURL = "192.168.0.100";
-        //new DoRead().execute(videoURL);
-        new DoSendData().execute(robotURL);
+        new DoRead().execute(videoURL);
+        //new DoSendData().execute(robotURL);
 
         testButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 System.out.println("Send Button Pressed");
-
+                drawerLayout.openDrawer(Gravity.LEFT);
             }
         });
 
@@ -315,6 +331,20 @@ public class MainActivity extends Activity implements SensorEventListener {
         holdPositionToggleButton = (ToggleButton)findViewById(R.id.toggleHoldPosition);
 
         testButton = (Button)findViewById(R.id.testButton);
+
+        title = drawerTitle = getTitle();
+        menuTitles = getResources().getStringArray(R.array.drawer_items);
+        drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
+        drawerList = (ListView)findViewById(R.id.list_slidermenu);
+
+        drawerItems = new ArrayList<>();
+
+        drawerItems.add(new DrawerItem(menuTitles[0]));
+        drawerItems.add(new DrawerItem(menuTitles[1], true, "22"));
+
+        drawerListAdapter = new DrawerListAdapter(getApplicationContext(), drawerItems);
+        //drawerList.setAdapter(drawerListAdapter);
+
 
     }
 

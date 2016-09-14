@@ -1,126 +1,131 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#3b3b3b"
-    android:orientation="vertical">
-    <LinearLayout
+<android.support.v4.widget.DrawerLayout
+xmlns:android="http://schemas.android.com/apk/res/android"
+android:id="@+id/drawer_layout"
+android:layout_width="match_parent"
+android:layout_height="match_parent">
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:background="#fff"
-        android:orientation="horizontal"
-        android:layout_weight="0.33"
-        android:paddingTop="0dp"
-        android:paddingBottom="0dp">
-
-            <io.github.funkynoodles.testsensor.MjpegView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/mjpegView" />
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.67"
-        android:paddingTop="0dp"
-        android:gravity="bottom">
-        <RelativeLayout
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <io.github.funkynoodles.testsensor.MjpegView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingBottom="0dp"
+            android:id="@+id/mjpegView" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.67"
             android:paddingTop="0dp"
-            android:background="#987abc">
+            android:gravity="bottom">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingBottom="0dp"
+                android:paddingTop="0dp">
 
-            <SeekBar
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:id="@+id/thrustBar"
-                android:rotation="270"
-                android:layout_centerVertical="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true"
-                android:indeterminate="false" />
+                <SeekBar
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/thrustBar"
+                    android:rotation="270"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
+                    android:indeterminate="false" />
 
-            <SeekBar
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:id="@+id/altitudeBar"
-                android:rotation="270"
-                android:layout_centerVertical="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"/>
+                <SeekBar
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/altitudeBar"
+                    android:rotation="270"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Thrust"
-                android:id="@+id/horThrustProgress"
-                android:textSize="15dp"
-                android:layout_alignLeft="@+id/thrustBar"
-                android:layout_alignStart="@+id/thrustBar"
-                android:layout_centerVertical="true" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Thrust"
+                    android:id="@+id/horThrustProgress"
+                    android:textSize="15dp"
+                    android:layout_alignLeft="@+id/thrustBar"
+                    android:layout_alignStart="@+id/thrustBar"
+                    android:layout_centerVertical="true" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Altitude Thrust"
-                android:id="@+id/verThrustProgress"
-                android:layout_centerVertical="true"
-                android:textSize="15dp"
-                android:layout_alignRight="@+id/altitudeBar"
-                android:layout_alignEnd="@+id/altitudeBar" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Altitude Thrust"
+                    android:id="@+id/verThrustProgress"
+                    android:layout_centerVertical="true"
+                    android:textSize="15dp"
+                    android:layout_alignRight="@+id/altitudeBar"
+                    android:layout_alignEnd="@+id/altitudeBar" />
 
-            <ToggleButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Light"
-                android:id="@+id/toggleLight"
-                android:checked="false"
-                android:layout_below="@+id/textLight"
-                android:layout_centerHorizontal="true" />
+                <ToggleButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Light"
+                    android:id="@+id/toggleLight"
+                    android:checked="false"
+                    android:layout_below="@+id/textLight"
+                    android:layout_centerHorizontal="true" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Light"
-                android:id="@+id/textLight"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Light"
+                    android:id="@+id/textLight"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Hold Position"
-                android:id="@+id/textHoldPosition"
-                android:layout_below="@+id/toggleLight"
-                android:layout_centerHorizontal="true" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Hold Position"
+                    android:id="@+id/textHoldPosition"
+                    android:layout_below="@+id/toggleLight"
+                    android:layout_centerHorizontal="true" />
 
-            <ToggleButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Hold Position"
-                android:id="@+id/toggleHoldPosition"
-                android:layout_below="@+id/textHoldPosition"
-                android:layout_centerHorizontal="true"
-                android:checked="false" />
+                <ToggleButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Hold Position"
+                    android:id="@+id/toggleHoldPosition"
+                    android:layout_below="@+id/textHoldPosition"
+                    android:layout_centerHorizontal="true"
+                    android:checked="false" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Turn Multiplier"
-                android:id="@+id/textTurn"
-                android:layout_below="@+id/toggleHoldPosition"
-                android:layout_centerHorizontal="true" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Turn Multiplier"
+                    android:id="@+id/textTurn"
+                    android:layout_below="@+id/toggleHoldPosition"
+                    android:layout_centerHorizontal="true" />
 
-            <Button
-                style="?android:attr/buttonStyleSmall"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Send"
-                android:id="@+id/testButton"
-                android:layout_alignTop="@+id/textLight"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true" />
-        </RelativeLayout>
-    </LinearLayout>
-</LinearLayout>
+                <Button
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Send"
+                    android:id="@+id/testButton"
+                    android:layout_alignTop="@+id/textLight"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true" />
+            </RelativeLayout>
+        </LinearLayout>
+    </FrameLayout>
+    <!-- Listview to display slider menu -->
+    <ListView
+        android:id="@+id/list_slidermenu"
+        android:layout_width="240dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:choiceMode="singleChoice"
+        android:divider="@color/list_divider"
+        android:dividerHeight="1dp"
+        android:listSelector="@drawable/list_selector"
+        android:background="@color/list_background"/>
+</android.support.v4.widget.DrawerLayout>
