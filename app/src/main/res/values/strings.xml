@@ -2,4 +2,7 @@
     <string name="app_name">DRIPdroid</string>
 
     <string name="action_settings">Settings</string>
+
+    <string name="nav_toggle_light">Light</string>
+    <string name="nav_toggle_hold">Hold Position</string>
 </resources>

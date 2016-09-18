@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -21,21 +20,21 @@ import io.github.funkynoodles.testsensor.model.DrawerItem;
 public class DrawerListAdapter extends BaseAdapter{
 
     private Context context;
-    private ArrayList<DrawerItem> navDrawerItems;
+    private ArrayList<DrawerItem> drawerItems;
 
-    public DrawerListAdapter(Context context, ArrayList<DrawerItem> navDrawerItems){
+    public DrawerListAdapter(Context context, ArrayList<DrawerItem> drawerItems){
         this.context = context;
-        this.navDrawerItems = navDrawerItems;
+        this.drawerItems = drawerItems;
     }
 
     @Override
     public int getCount() {
-        return navDrawerItems.size();
+        return drawerItems.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return navDrawerItems.get(position);
+        return drawerItems.get(position);
     }
 
     @Override
@@ -51,20 +50,18 @@ public class DrawerListAdapter extends BaseAdapter{
             convertView = mInflater.inflate(R.layout.drawer_list_item, null);
         }
 
-        ImageView imgIcon = (ImageView) convertView.findViewById(R.id.icon);
         TextView txtTitle = (TextView) convertView.findViewById(R.id.title);
-        TextView txtCount = (TextView) convertView.findViewById(R.id.counter);
 
-        txtTitle.setText(navDrawerItems.get(position).getTitle());
+        txtTitle.setText(drawerItems.get(position).getTitle());
 
         // displaying count
         // check whether it set visible or not
-        if(navDrawerItems.get(position).getCounterVisibility()){
-            txtCount.setText(navDrawerItems.get(position).getCount());
+        /*if(drawerItems.get(position).getCounterVisibility()){
+            txtCount.setText(drawerItems.get(position).getCount());
         }else{
             // hide the counter view
             txtCount.setVisibility(View.GONE);
-        }
+        }*/
 
         return convertView;
     }

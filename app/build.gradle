@@ -34,4 +34,5 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.1.0'
     compile project(':httpcore-4.2.1')
     compile project(':httpclient-4.2.1')
+    compile 'com.android.support:design:23.4.0'
 }

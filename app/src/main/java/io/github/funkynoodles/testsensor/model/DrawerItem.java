@@ -1,7 +1,5 @@
 package io.github.funkynoodles.testsensor.model;
 
-import io.github.funkynoodles.testsensor.adapter.DrawerListAdapter;
-
 /**
  * Created by Louis on 9/13/2016.
  * Model for item in drawer

@@ -9,11 +9,14 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ListView;
@@ -76,11 +79,13 @@ public class MainActivity extends Activity implements SensorEventListener {
     private ToggleButton lightToggleButton;
     private ToggleButton holdPositionToggleButton;
     private TextView turnText;
-    private Button testButton;
+    private Button settingsButton;
 
     private MjpegView mv;
 
     // Drawer
+    private android.support.design.widget.NavigationView navigationView;
+    public static int navItemIndex = 0;
     private DrawerLayout drawerLayout;
     private ListView drawerList;
     private ActionBarDrawerToggle drawerToggle;
@@ -232,10 +237,9 @@ public class MainActivity extends Activity implements SensorEventListener {
         new DoRead().execute(videoURL);
         //new DoSendData().execute(robotURL);
 
-        testButton.setOnClickListener(new View.OnClickListener() {
+        settingsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("Send Button Pressed");
                 drawerLayout.openDrawer(Gravity.LEFT);
             }
         });
@@ -317,34 +321,48 @@ public class MainActivity extends Activity implements SensorEventListener {
 
     public void initializeViews() {
 
-        turnText = (TextView)findViewById(R.id.textTurn);
+        turnText = (TextView) findViewById(R.id.textTurn);
 
         horThrustBar = (SeekBar) findViewById(R.id.thrustBar);
         horThrustBar.setProgress(50);
-        horThrustProgress = (TextView)findViewById(R.id.horThrustProgress);
+        horThrustProgress = (TextView) findViewById(R.id.horThrustProgress);
 
         verThrustBar = (SeekBar) findViewById(R.id.altitudeBar);
         verThrustBar.setProgress(50);
-        verThrustProgress = (TextView)findViewById(R.id.verThrustProgress);
+        verThrustProgress = (TextView) findViewById(R.id.verThrustProgress);
 
-        lightToggleButton = (ToggleButton)findViewById(R.id.toggleLight);
-        holdPositionToggleButton = (ToggleButton)findViewById(R.id.toggleHoldPosition);
+        lightToggleButton = (ToggleButton) findViewById(R.id.toggleLight);
+        holdPositionToggleButton = (ToggleButton) findViewById(R.id.toggleHoldPosition);
 
-        testButton = (Button)findViewById(R.id.testButton);
+        settingsButton = (Button) findViewById(R.id.settings_button);
 
         title = drawerTitle = getTitle();
         menuTitles = getResources().getStringArray(R.array.drawer_items);
-        drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
-        drawerList = (ListView)findViewById(R.id.list_slidermenu);
-
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(MenuItem item) {
+                switch(item.getItemId()){
+                    case R.id.nav_toggle_light:
+                        navItemIndex = 0;
+                        break;
+                    case R.id.nav_toggle_hold:
+                        navItemIndex = 1;
+                        break;
+                    default:
+                        navItemIndex = 0;
+                }
+                if (item.isChecked()) {
+                    item.setChecked(false);
+                } else {
+                    item.setChecked(true);
+                }
+                item.setChecked(true);
+                return false;
+            }
+        });
         drawerItems = new ArrayList<>();
-
-        drawerItems.add(new DrawerItem(menuTitles[0]));
-        drawerItems.add(new DrawerItem(menuTitles[1], true, "22"));
-
-        drawerListAdapter = new DrawerListAdapter(getApplicationContext(), drawerItems);
-        //drawerList.setAdapter(drawerListAdapter);
-
 
     }
 
