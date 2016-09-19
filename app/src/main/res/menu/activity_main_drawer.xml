@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <group android:checkableBehavior="single">
-        <item
-            android:id="@+id/nav_toggle_light"
-            android:title="@string/nav_toggle_light" />
-        <item
-            android:id="@+id/nav_toggle_hold"
-            android:title="@string/nav_toggle_hold" />
-    </group>
+    <item android:title="@string/robot_settings">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/nav_toggle_light"
+                    android:icon="@drawable/ic_lightbulb_outline_white_24dp"
+                    android:title="@string/nav_toggle_light" />
+                <item
+                    android:id="@+id/nav_toggle_hold"
+                    android:icon="@drawable/ic_vertical_align_center_white_24dp"
+                    android:title="@string/nav_toggle_hold" />
+            </group>
+        </menu>
+    </item>
 </menu>

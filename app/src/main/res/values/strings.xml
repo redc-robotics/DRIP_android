@@ -3,6 +3,14 @@
 
     <string name="action_settings">Settings</string>
 
+    <string name="robot_settings">Robot Settings</string>
     <string name="nav_toggle_light">Light</string>
     <string name="nav_toggle_hold">Hold Position</string>
+
+
+    <!-- Toasts -->
+    <string name="hold_position">Hold Position is now</string>
+    <string name="light">Light is now</string>
+    <string name="on">On</string>
+    <string name="off">Off</string>
 </resources>

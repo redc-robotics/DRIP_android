@@ -10,19 +10,16 @@ import android.hardware.SensorManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CompoundButton;
-import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.ToggleButton;
+import android.widget.Toast;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -35,10 +32,10 @@ import java.net.URI;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 
-import io.github.funkynoodles.testsensor.adapter.DrawerListAdapter;
-import io.github.funkynoodles.testsensor.model.DrawerItem;
-
 public class MainActivity extends Activity implements SensorEventListener {
+
+    // Context
+    private static Context context;
 
     // Thread flags
     private volatile boolean activityStopped = false;
@@ -76,33 +73,23 @@ public class MainActivity extends Activity implements SensorEventListener {
     private TextView horThrustProgress;
     private SeekBar verThrustBar;
     private TextView verThrustProgress;
-    private ToggleButton lightToggleButton;
-    private ToggleButton holdPositionToggleButton;
     private TextView turnText;
     private Button settingsButton;
 
     private MjpegView mv;
+    private MjpegView mvBack;
 
     // Drawer
     private android.support.design.widget.NavigationView navigationView;
     public static int navItemIndex = 0;
     private DrawerLayout drawerLayout;
-    private ListView drawerList;
-    private ActionBarDrawerToggle drawerToggle;
 
-    private CharSequence drawerTitle;
-    private CharSequence title;
-
-    private String[] menuTitles;
-
-    private ArrayList<DrawerItem> drawerItems;
-    private DrawerListAdapter drawerListAdapter;
 
     //Networking
 
     int serverPort = 8008;
 
-    public class DoRead extends AsyncTask<String, Void, MjpegInputStream> {
+    public class DoReadFront extends AsyncTask<String, Void, MjpegInputStream> {
         protected MjpegInputStream doInBackground(String... url) {
             //TODO: if camera has authentication deal with it and don't just not work
             HttpResponse res = null;
@@ -128,6 +115,34 @@ public class MainActivity extends Activity implements SensorEventListener {
             mv.setSource(result);
             mv.setDisplayMode(MjpegView.SIZE_BEST_FIT);
             mv.showFps(true);
+        }
+    }
+
+    public class DoReadBack extends AsyncTask<String, Void, MjpegInputStream> {
+        protected MjpegInputStream doInBackground(String... url) {
+            //TODO: if camera has authentication deal with it and don't just not work
+            HttpResponse res = null;
+            DefaultHttpClient httpclient = new DefaultHttpClient();
+            try {
+                res = httpclient.execute(new HttpGet(URI.create(url[0])));
+                //Log.d(TAG, "2. Request finished, status = " + res.getStatusLine().getStatusCode());
+                if (res.getStatusLine().getStatusCode() == 401) {
+                    //You must turn off camera User Access Control before this will work
+                    return null;
+                }
+                return new MjpegInputStream(res.getEntity().getContent());
+            }catch (IOException e) {
+                e.printStackTrace();
+                //Log.d(TAG, "Request failed-IOException", e);
+                //Error connecting to camera
+            }
+            return null;
+        }
+
+        protected void onPostExecute(MjpegInputStream result) {
+            mvBack.setSource(result);
+            mvBack.setDisplayMode(MjpegView.SIZE_BEST_FIT);
+            mvBack.showFps(true);
         }
     }
 
@@ -220,21 +235,23 @@ public class MainActivity extends Activity implements SensorEventListener {
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
+        context = this;
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         setContentView(R.layout.activity_main);
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
 
-        mv = (MjpegView)findViewById(R.id.mjpegView);
         initializeViews();
 
         String videoURL = "http://141.89.114.98/cgi-bin/video640x480.mjpg";//http://funkynoodles:8080/cam_1.cgi";
-        videoURL = "http://96.10.1.168/mjpg/1/video.mjpg?timestamp=1469826529251";//http://webcam.st-malo.com/axis-cgi/mjpg/video.cgi"; //http://trackfield.webcam.oregonstate.edu/axis-cgi/mjpg/video.cgi?resolution=800x600&amp%3bdummy=1333689998337";
+        videoURL = "http://96.10.1.168/mjpg/1/video.mjpg?timestamp=1469826529251"; //http://trackfield.webcam.oregonstate.edu/axis-cgi/mjpg/video.cgi?resolution=800x600&amp%3bdummy=1333689998337";
+        String video2URL = "http://webcam.st-malo.com/axis-cgi/mjpg/video.cgi";
         //This is the robot webcam:
         //videoURL = "http://192.168.0.2:8090/?action=stream";
         String robotURL = "192.168.0.100";
-        new DoRead().execute(videoURL);
+        new DoReadFront().execute(videoURL);
+        new DoReadBack().execute(video2URL);
         //new DoSendData().execute(robotURL);
 
         settingsButton.setOnClickListener(new View.OnClickListener() {
@@ -293,33 +310,12 @@ public class MainActivity extends Activity implements SensorEventListener {
                 verThrustProgress.setText(String.valueOf(verThrust));
             }
         });
-
-        lightToggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    light = 1;
-                } else {
-                    light = 0;
-                }
-            }
-        });
-
-        holdPositionToggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-                if (isChecked) {
-                    holdPosition = 1;
-                } else {
-                    holdPosition = 0;
-                }
-                System.out.println(holdPosition);
-            }
-        });
     }
 
     public void initializeViews() {
+
+        mv = (MjpegView)findViewById(R.id.mjpegView);
+        mvBack = (MjpegView)findViewById(R.id.mjpegViewBack);
 
         turnText = (TextView) findViewById(R.id.textTurn);
 
@@ -331,39 +327,52 @@ public class MainActivity extends Activity implements SensorEventListener {
         verThrustBar.setProgress(50);
         verThrustProgress = (TextView) findViewById(R.id.verThrustProgress);
 
-        lightToggleButton = (ToggleButton) findViewById(R.id.toggleLight);
-        holdPositionToggleButton = (ToggleButton) findViewById(R.id.toggleHoldPosition);
-
         settingsButton = (Button) findViewById(R.id.settings_button);
 
-        title = drawerTitle = getTitle();
-        menuTitles = getResources().getStringArray(R.array.drawer_items);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         navigationView = (NavigationView) findViewById(R.id.nav_view);
+
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem item) {
-                switch(item.getItemId()){
+                String toastMsg = "";
+                switch (item.getItemId()) {
                     case R.id.nav_toggle_light:
                         navItemIndex = 0;
+                        // Toggle light
+                        if (light == 0) {
+                            light = 1;
+                            toastMsg = getString(R.string.light) + " " + getString(R.string.on);
+                        } else {
+                            light = 0;
+                            toastMsg = getString(R.string.light) + " " + getString(R.string.off);
+                        }
                         break;
                     case R.id.nav_toggle_hold:
                         navItemIndex = 1;
+                        // Toggle hold position
+                        if (holdPosition == 0) {
+                            holdPosition = 1;
+                            toastMsg = getString(R.string.hold_position) + " " + getString(R.string.on);
+                        } else {
+                            holdPosition = 0;
+                            toastMsg = getString(R.string.hold_position) + " " + getString(R.string.off);
+                        }
                         break;
                     default:
                         navItemIndex = 0;
                 }
+                Toast.makeText(getContext(), toastMsg, Toast.LENGTH_SHORT).show();
                 if (item.isChecked()) {
                     item.setChecked(false);
                 } else {
                     item.setChecked(true);
                 }
-                item.setChecked(true);
+                // Close drawer
+                drawerLayout.closeDrawer(GravityCompat.START);
                 return false;
             }
         });
-        drawerItems = new ArrayList<>();
-
     }
 
     //onResume() register the accelerometer for listening the events
@@ -371,6 +380,7 @@ public class MainActivity extends Activity implements SensorEventListener {
         super.onResume();
         activityPaused = false;
         mv.startPlayback();
+        mvBack.startPlayback();
         //sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
     }
 
@@ -379,6 +389,7 @@ public class MainActivity extends Activity implements SensorEventListener {
         super.onPause();
         activityPaused = true;
         mv.stopPlayback();
+        mvBack.stopPlayback();
         //sensorManager.unregisterListener(this);
         vx = 0;
         vy = 0;
@@ -392,6 +403,7 @@ public class MainActivity extends Activity implements SensorEventListener {
         super.onStop();
         activityStopped = true;
         mv.stopPlayback();
+        mvBack.stopPlayback();
     }
 
     @Override
@@ -452,5 +464,9 @@ public class MainActivity extends Activity implements SensorEventListener {
                 propellerB_mode = 2; // prop B back
             }
         }
+    }
+
+    public Context getContext(){
+        return context;
     }
 }
