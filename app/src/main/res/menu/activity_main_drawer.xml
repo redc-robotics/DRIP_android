@@ -11,6 +11,10 @@
                     android:id="@+id/nav_toggle_hold"
                     android:icon="@drawable/ic_vertical_align_center_white_24dp"
                     android:title="@string/nav_toggle_hold" />
+                <item
+                    android:id="@+id/nav_connection"
+                    android:icon="@drawable/ic_network_wifi_white_24dp"
+                    android:title="@string/nav_connection"/>
             </group>
         </menu>
     </item>

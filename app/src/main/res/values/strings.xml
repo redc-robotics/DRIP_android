@@ -6,6 +6,7 @@
     <string name="robot_settings">Robot Settings</string>
     <string name="nav_toggle_light">Light</string>
     <string name="nav_toggle_hold">Hold Position</string>
+    <string name="nav_connection">Connection</string>
 
 
     <!-- Toasts -->

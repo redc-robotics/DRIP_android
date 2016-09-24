@@ -34,6 +34,9 @@ import java.util.ArrayList;
 
 public class MainActivity extends Activity implements SensorEventListener {
 
+    // Tag
+    private String TAG = "Main Activity";
+
     // Context
     private static Context context;
 
@@ -105,7 +108,6 @@ public class MainActivity extends Activity implements SensorEventListener {
                 return new MjpegInputStream(res.getEntity().getContent());
             }catch (IOException e) {
                 e.printStackTrace();
-                //Log.d(TAG, "Request failed-IOException", e);
                 //Error connecting to camera
             }
             return null;
@@ -335,17 +337,14 @@ public class MainActivity extends Activity implements SensorEventListener {
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem item) {
-                String toastMsg = "";
                 switch (item.getItemId()) {
                     case R.id.nav_toggle_light:
                         navItemIndex = 0;
                         // Toggle light
                         if (light == 0) {
                             light = 1;
-                            toastMsg = getString(R.string.light) + " " + getString(R.string.on);
                         } else {
                             light = 0;
-                            toastMsg = getString(R.string.light) + " " + getString(R.string.off);
                         }
                         break;
                     case R.id.nav_toggle_hold:
@@ -353,16 +352,13 @@ public class MainActivity extends Activity implements SensorEventListener {
                         // Toggle hold position
                         if (holdPosition == 0) {
                             holdPosition = 1;
-                            toastMsg = getString(R.string.hold_position) + " " + getString(R.string.on);
                         } else {
                             holdPosition = 0;
-                            toastMsg = getString(R.string.hold_position) + " " + getString(R.string.off);
                         }
                         break;
                     default:
                         navItemIndex = 0;
                 }
-                Toast.makeText(getContext(), toastMsg, Toast.LENGTH_SHORT).show();
                 if (item.isChecked()) {
                     item.setChecked(false);
                 } else {

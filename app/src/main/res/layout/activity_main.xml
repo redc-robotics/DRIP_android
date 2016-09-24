@@ -24,7 +24,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="0.67"
         android:paddingTop="0dp"
         android:gravity="bottom">
         <RelativeLayout
@@ -38,9 +37,10 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/thrustBar"
                 android:rotation="270"
-                android:layout_centerVertical="true"
-                android:layout_alignParentEnd="true"
-                android:indeterminate="false" />
+                android:indeterminate="false"
+                android:layout_marginTop="55dp"
+                android:layout_below="@+id/horThrustProgress"
+                android:layout_alignParentEnd="true" />
 
             <SeekBar
                 android:layout_width="200dp"
@@ -53,25 +53,22 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Thrust"
                 android:id="@+id/horThrustProgress"
-                android:textSize="15dp"
+                android:textSize="15sp"
                 android:layout_alignStart="@+id/thrustBar"
                 android:layout_centerVertical="true" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Altitude Thrust"
                 android:id="@+id/verThrustProgress"
                 android:layout_centerVertical="true"
-                android:textSize="15dp"
+                android:textSize="15sp"
                 android:layout_alignEnd="@+id/altitudeBar" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Turn Multiplier"
                 android:id="@+id/textTurn"
                 android:layout_alignBottom="@+id/altitudeBar"
                 android:layout_centerHorizontal="true" />
